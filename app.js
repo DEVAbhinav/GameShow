@@ -24,13 +24,13 @@ var uristring = 'mongodb://localhost/first';
 var mongoOptions = { db: { safe: true } };
 
 // Connect to Database
-mongoose.connect(uristring, mongoOptions, function(err, res) {
-    if (err) {
-        console.log('ERROR connecting to: remote' + uristring + '. ' + err);
-    } else {
-        console.log('Successfully connected to: remote' + uristring);
-    }
-});
+// mongoose.connect(uristring, mongoOptions, function(err, res) {
+//     if (err) {
+//         console.log('ERROR connecting to: remote' + uristring + '. ' + err);
+//     } else {
+//         console.log('Successfully connected to: remote' + uristring);
+//     }
+// });
 
 // Requiring Routes
 var renderLogin = require('./routes/renderLogin');
@@ -48,6 +48,8 @@ var makeChoice = require('./routes/makeChoice');
 var leaderBoard = require('./routes/leaderBoard')
 var renderLeaderBoard = require('./routes/renderLeaderBoard');
 var renderWinner = require('./routes/renderWinner');
+var renderEnding = require('./routes/renderEnding');
+
 //for backOffice use routes
 
 var renderAdminLogin = require('./routes/renderAdminLogin');
@@ -77,11 +79,13 @@ app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+
 app.use(session({
     secret: '57eac3e1d6a4cc1134578440',
-    store: new MongoStore({
-        mongooseConnection: mongoose.connection
-    })
+    // store: new MongoStore({
+    //     mongooseConnection: mongoose.connection
+    //})
 }));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -169,13 +173,13 @@ app.get('/user', user);
 
 app.get('/totalLevel', totalLevel);
 
-app.get('/getQuestion', getQuestion);
+// app.get('/getQuestion', getQuestion);
 
-app.post('/checkAnswer', checkAnswer);
+// app.post('/checkAnswer', checkAnswer);
 
-app.get('/makeChoice', renderMakeChoice);
+// app.get('/makeChoice', renderMakeChoice);
 
-app.post("/makeChoice", makeChoice);
+// app.post("/makeChoice", makeChoice);
 
 app.get('/Leader', renderLeaderBoard);
 
@@ -183,7 +187,12 @@ app.get('/winner', renderWinner);
 
 app.get('/leaderBoard', leaderBoard);
 
+//Change this for final winners 
 
+app.get('/finish', renderEnding);
+
+
+//-------------------------------------
 //admin apis
 
 
@@ -220,7 +229,7 @@ app.get('/studentProfile',studentProfile);
 app.get('/logout', logout)
 
 
-app.listen("8895", function() {
+app.listen(process.env.PORT||8895, function() {
     console.log("server listening at port 8895");
 });
 
